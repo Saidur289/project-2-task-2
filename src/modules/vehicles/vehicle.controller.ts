@@ -39,7 +39,31 @@ const getVehicles = async(req: Request ,res: Response) => {
      })
    }
 }
+const getSingleVehicle = async(req: Request, res: Response) => {
+      try {
+        const result = await vehiclesService.getSingleVehicle(req.params.vehicleId as string)
+        console.log(result.rowCount);
+        if(result.rowCount === 0){
+           res.status(201).json({
+            success: true,
+            message: "No Vehicle Found",
+            data: result.rows[0]
+        }) 
+        }
+        res.status(201).json({
+            success: true,
+            message: "Vehicles retrieved successfully",
+            data: result.rows[0]
+        })
+    } catch (error: any) {
+     res.status(500).json({
+        success: false,
+        message: error.message
+     })
+   }
+}
 export const vehiclesController = {
     createVehicle, 
-    getVehicles
+    getVehicles,
+    getSingleVehicle
 }
